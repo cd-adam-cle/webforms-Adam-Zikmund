@@ -1,0 +1,148 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #fafafa;
+  color: #333;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Dark mode styly pro body */
+body.dark-mode {
+  background-color: #333;
+  color: white;
+}
+
+form {
+  background-color: #ffffff;
+  border: 3px solid #f1f1f1;
+  border-radius: 16px;
+  padding:16px;
+  /*
+  TODO 4: Nastavte velikost formulář na poloviční vůči velikosti okna prohlížeče.
+  */
+  width: 50vw;
+
+  /*
+  TODO 5: Formulář zarovnejte na střed.
+  */
+  margin: 0 auto;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* Dark mode styly pro formulář */
+body.dark-mode form {
+  background-color: #2a2a2a;
+  border-color: #444;
+  color: white;
+}
+
+input[type=email], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-radius: 5px;
+  background-color: white;
+  color: #333;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+/* Dark mode styly pro input pole */
+body.dark-mode input[type=email],
+body.dark-mode input[type=password] {
+  background-color: #1a1a1a;
+  color: white;
+  border-color: #555;
+}
+
+body.dark-mode input[type=email]::placeholder,
+body.dark-mode input[type=password]::placeholder {
+  color: #aaa;
+}
+
+button {
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  display: inline;
+  width:100%;
+}
+
+button:hover { /* jak se chová tlačítko po najetí myši */
+  opacity: 0.8;
+}
+
+.darkmodebtn{
+  float:right;
+  width:auto;
+
+  /*
+  TODO 6: Nastavte barvu tlačítka na stejnou barvu, jako má pozadí stránky
+  */
+  background-color: #ffffff;
+  border: 2px solid #ddd;
+
+  /*
+  TODO 7: Nastavte zaoblení obdélníku tlačítka tak, aby se z něj stal kruh.
+  */
+  border-radius: 50%;
+
+  /*
+  TODO 8: Nastavte odsazení od obrázku v tlačítku o 8px
+  */
+  padding: 8px;
+
+  /*
+  TODO 9: Nastavte odsazení od kraje stránky o 8px
+  */
+  margin: 8px;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+.darkmodebtn > img{
+  width:30px;
+}
+.darkmodebtn:hover{
+  background-color: #e0e0e0;
+}
+
+/* Dark mode styly pro darkmode tlačítko */
+body.dark-mode .darkmodebtn {
+  background-color: #2a2a2a;
+  border-color: #555;
+}
+
+body.dark-mode .darkmodebtn:hover {
+  background-color: #444;
+  }
+
+.cancelbtn {
+  background-color: #f44336;
+}
+.signupbtn{
+  background-color: #04AA6D;
+}
+
+.button-container {
+  /* pro rovnoměrné rozdělení tlačítek Cancel a Sign Up */
+  display: flex;
+  justify-content: space-between;
+  gap:8px;
+}
+
+/* Dark mode styly pro checkbox */
+body.dark-mode input[type=checkbox] {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Dark mode styly pro odkazy */
+body.dark-mode a {
+  color: #66b3ff;
+}
+
+/* Dark mode styly pro hr */
+body.dark-mode hr {
+  border-color: #555;
+}
