@@ -35,7 +35,7 @@ body.dark-mode form {
   color: white;
 }
 
-input[type=email], input[type=password] {
+input[type=email], input[type=password], input[type=date], input[type=file] {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -50,7 +50,9 @@ input[type=email], input[type=password] {
 
 /* Dark mode styly pro input pole */
 body.dark-mode input[type=email],
-body.dark-mode input[type=password] {
+body.dark-mode input[type=password],
+body.dark-mode input[type=date],
+body.dark-mode input[type=file] {
   background-color: #1a1a1a;
   color: white;
   border-color: #555;
@@ -59,6 +61,13 @@ body.dark-mode input[type=password] {
 body.dark-mode input[type=email]::placeholder,
 body.dark-mode input[type=password]::placeholder {
   color: #aaa;
+}
+
+/* Dark mode file input button */
+body.dark-mode input[type=file]::file-selector-button {
+  background-color: #444;
+  color: white;
+  border: 1px solid #666;
 }
 
 button {
@@ -145,4 +154,50 @@ body.dark-mode a {
 /* Dark mode styly pro hr */
 body.dark-mode hr {
   border-color: #555;
+}
+
+/* Styly pro výběr plánu */
+.plan-options {
+  margin: 8px 0 16px 0;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.plan-option {
+  display: block;
+  padding: 10px;
+  margin: 4px 0;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.plan-option:hover {
+  background-color: rgba(4, 170, 109, 0.1);
+}
+
+.plan-option input[type=radio] {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.plan-option span {
+  font-weight: normal;
+}
+
+/* Dark mode styly pro výběr plánu */
+body.dark-mode .plan-options {
+  background-color: #1a1a1a;
+  border-color: #555;
+}
+
+body.dark-mode .plan-option:hover {
+  background-color: rgba(4, 170, 109, 0.2);
+}
+
+body.dark-mode .plan-option input[type=radio] {
+  filter: invert(1) hue-rotate(180deg);
 }
