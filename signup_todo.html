@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="styles_todo.css"> 
     </head>
     <body>
-        <button class="darkmodebtn">🌙</button>
+        <button class="darkmodebtn" onclick="myMove()">🌙</button>
         <form>            
             <h1>Sign Up</h1>
             <p>Please fill in this form to create an account.</p>
@@ -15,13 +15,23 @@
             <input type="email" placeholder="Enter Email" name="email" required>
 
             <label for="password"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="password" required>
+            <div class="password-container">
+                <input type="password" id="password" placeholder="Enter Password" name="password" required>
+                <span class="toggle-password" data-target="password">👀</span>
+            </div>
+            <span id="password-strength" style="font-size: 14px; display: none;"></span>
 
             <label for="password-repeat"><b>Repeat Password</b></label>
-            <input type="password" placeholder="Repeat Password" name="password-repeat" required>
+            <div class="password-container">
+                <input type="password" id="password-repeat" placeholder="Repeat Password" name="password-repeat" required>
+                <span class="toggle-password" data-target="password-repeat">👀</span>
+            </div>
+            <span id="pwd-alert" style="color: red; font-size: 14px; display: none;">Passwords do not match!</span>
 
             <label for="birthdate"><b>Date of Birth</b></label>
-            <input type="date" name="birthdate" required>
+            <input type="date" id="birthdate" name="birthdate" required>
+            <button type="button" onclick="calculateAge()" style="background-color: #5f9ea0; width: auto; padding: 8px 16px; margin-top: 4px;">Kolik je mi dní?</button>
+            <div id="age-result" style="margin-top: 8px; font-size: 14px; display: none;"></div>
 
             <label for="profile-picture"><b>Profile Picture</b></label>
             <input type="file" name="profile-picture" accept="image/*">
@@ -53,10 +63,260 @@
                 <button type="submit" class="signupbtn">Sign Up</button>
             </div>
         </form>
+
+        <div id="todo-container">
+            <h2>Úkoly</h2>
+            <div id="active-tasks"></div>
+            <div class="add-task-container">
+                <input type="text" id="new-task-input" placeholder="+ Položka na seznamu">
+                <button onclick="addTask()">Přidat</button>
+            </div>
+            <div id="completed-separator" style="display: none;">
+                <hr>
+                <p id="completed-count">0 dokončených položek</p>
+            </div>
+            <div id="completed-tasks"></div>
+        </div>
+
         <script>
-            document.querySelector('.darkmodebtn').addEventListener('click', function() {
-                document.body.classList.toggle('dark-mode');
+            const password = document.getElementById('password');
+            const passwordRepeat = document.getElementById('password-repeat');
+            const passwordError = document.getElementById('pwd-alert');
+            const passwordStrength = document.getElementById('password-strength');
+            const form = document.querySelector('form');
+
+            function checkPasswordStrength() {
+                const pwd = password.value;
+
+                if (pwd === '') {
+                    passwordStrength.style.display = 'none';
+                    return true;
+                }
+
+                const hasLower = /[a-z]/.test(pwd);
+                const hasUpper = /[A-Z]/.test(pwd);
+                const hasDigit = /[0-9]/.test(pwd);
+                const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
+
+                if (hasLower && hasUpper && hasDigit && hasSpecial) {
+                    passwordStrength.textContent = '✓ Password is strong';
+                    passwordStrength.style.color = 'green';
+                    passwordStrength.style.display = 'block';
+                    return true;
+                } else {
+                    let missing = [];
+                    if (!hasLower) missing.push('lowercase');
+                    if (!hasUpper) missing.push('uppercase');
+                    if (!hasDigit) missing.push('numbers');
+                    if (!hasSpecial) missing.push('special characters');
+
+                    passwordStrength.textContent = '✗ Password must contain: ' + missing.join(', ');
+                    passwordStrength.style.color = 'red';
+                    passwordStrength.style.display = 'block';
+                    return false;
+                }
+            }
+
+            function checkPasswordMatch() {
+                if (passwordRepeat.value === '') {
+                    passwordError.style.display = 'none';
+                    return true;
+                }
+
+                if (password.value !== passwordRepeat.value) {
+                    passwordError.style.display = 'block';
+                    return false;
+                } else {
+                    passwordError.style.display = 'none';
+                    return true;
+                }
+            }
+
+            password.addEventListener('input', function() {
+                checkPasswordStrength();
+                checkPasswordMatch();
             });
+            passwordRepeat.addEventListener('input', checkPasswordMatch);
+
+            // Validate on form submission
+            form.addEventListener('submit', function(e) {
+                const isPasswordStrong = checkPasswordStrength();
+                const doPasswordsMatch = checkPasswordMatch();
+
+                if (!isPasswordStrong) {
+                    e.preventDefault();
+                    alert('Password must contain lowercase, uppercase, numbers, and special characters!');
+                    return;
+                }
+
+                if (!doPasswordsMatch) {
+                    e.preventDefault();
+                    alert('Passwords do not match! Please make sure both passwords are identical.');
+                }
+            });
+
+            document.querySelectorAll('.toggle-password').forEach(function(eyeIcon) {
+                eyeIcon.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const passwordInput = document.getElementById(targetId);
+
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        this.textContent = '🙈';
+                    } else {
+                        passwordInput.type = 'password';
+                        this.textContent = '👀';
+                    }
+                });
+            });
+
+            function calculateAge() {
+                const birthdateInput = document.getElementById('birthdate');
+                const resultDiv = document.getElementById('age-result');
+
+                if (!birthdateInput.value) {
+                    alert('Prosím zadej své datum narození!');
+                    return;
+                }
+
+                const birthDate = new Date(birthdateInput.value);
+                const today = new Date();
+
+                const diffTime = today - birthDate;
+                const daysLived = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+                const nextBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+                if (nextBirthday < today) {
+                    nextBirthday.setFullYear(today.getFullYear() + 1);
+                }
+
+                const daysUntilBirthday = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
+
+                resultDiv.innerHTML = `<b>Žiješ už ${daysLived} dní!</b><br>Za ${daysUntilBirthday} dní budeš mít narozeniny! 🎂`;
+                resultDiv.style.display = 'block';
+                resultDiv.style.color = '#04AA6D';
+            }
+
+            let taskId = 0;
+
+            function addTask() {
+                const input = document.getElementById('new-task-input');
+                const taskText = input.value.trim();
+
+                if (taskText === '') {
+                    return;
+                }
+
+                const activeTasksDiv = document.getElementById('active-tasks');
+                const taskDiv = document.createElement('div');
+                taskDiv.className = 'task-item';
+                taskDiv.id = 'task-' + taskId;
+
+                taskDiv.innerHTML = `
+                    <input type="checkbox" onchange="toggleTask(${taskId})">
+                    <span>${taskText}</span>
+                `;
+
+                activeTasksDiv.appendChild(taskDiv);
+                input.value = '';
+                taskId++;
+            }
+
+            function toggleTask(id) {
+                const taskDiv = document.getElementById('task-' + id);
+                const checkbox = taskDiv.querySelector('input[type="checkbox"]');
+                const activeTasksDiv = document.getElementById('active-tasks');
+                const completedTasksDiv = document.getElementById('completed-tasks');
+                const separator = document.getElementById('completed-separator');
+
+                if (checkbox.checked) {
+                    taskDiv.classList.add('completed');
+                    completedTasksDiv.appendChild(taskDiv);
+                } else {
+                    taskDiv.classList.remove('completed');
+                    activeTasksDiv.appendChild(taskDiv);
+                }
+
+                const completedCount = completedTasksDiv.children.length;
+                const countText = document.getElementById('completed-count');
+
+                if (completedCount > 0) {
+                    separator.style.display = 'block';
+                    countText.textContent = completedCount + (completedCount === 1 ? ' dokončená položka' : ' dokončené položky');
+                } else {
+                    separator.style.display = 'none';
+                }
+            }
+
+            document.getElementById('new-task-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addTask();
+                }
+            });
+
+            // Dark mode toggle s animací - objíždění celého čtverce
+            let cornerPosition = 0; // 0: vpravo nahoře, 1: vlevo nahoře, 2: vlevo dole, 3: vpravo dole
+
+            function myMove() {
+                const elem = document.querySelector('.darkmodebtn');
+                const screenWidth = window.innerWidth;
+                const screenHeight = window.innerHeight;
+                const buttonWidth = elem.offsetWidth;
+                const buttonHeight = elem.offsetHeight;
+                const margin = 8;
+
+                // Přepni dark mode
+                document.body.classList.toggle('dark-mode');
+
+                // Definuj pozice rohů: [horizontal, vertical]
+                const corners = [
+                    { h: screenWidth - buttonWidth - margin, v: margin },        // vpravo nahoře
+                    { h: margin, v: margin },                                     // vlevo nahoře
+                    { h: margin, v: screenHeight - buttonHeight - margin },       // vlevo dole
+                    { h: screenWidth - buttonWidth - margin, v: screenHeight - buttonHeight - margin } // vpravo dole
+                ];
+
+                const currentCorner = corners[cornerPosition];
+                const nextPosition = (cornerPosition + 1) % 4;
+                const targetCorner = corners[nextPosition];
+
+                // Animace
+                let currentH = currentCorner.h;
+                let currentV = currentCorner.v;
+                const targetH = targetCorner.h;
+                const targetV = targetCorner.v;
+
+                let id = setInterval(function() {
+                    let reachedH = false;
+                    let reachedV = false;
+
+                    // Horizontální pohyb
+                    if (Math.abs(currentH - targetH) < 5) {
+                        currentH = targetH;
+                        reachedH = true;
+                    } else {
+                        currentH += currentH < targetH ? 5 : -5;
+                    }
+
+                    // Vertikální pohyb
+                    if (Math.abs(currentV - targetV) < 5) {
+                        currentV = targetV;
+                        reachedV = true;
+                    } else {
+                        currentV += currentV < targetV ? 5 : -5;
+                    }
+
+                    elem.style.left = currentH + 'px';
+                    elem.style.top = currentV + 'px';
+                    elem.style.right = 'auto';
+                    elem.style.bottom = 'auto';
+
+                    if (reachedH && reachedV) {
+                        clearInterval(id);
+                        cornerPosition = nextPosition;
+                    }
+                }, 5);
+            }
         </script>
     </body>
 </html>

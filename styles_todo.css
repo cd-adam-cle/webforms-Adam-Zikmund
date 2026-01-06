@@ -5,7 +5,6 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
-/* Dark mode styly pro body */
 body.dark-mode {
   background-color: #333;
   color: white;
@@ -16,23 +15,19 @@ form {
   border: 3px solid #f1f1f1;
   border-radius: 16px;
   padding:16px;
-  /*
-  TODO 4: Nastavte velikost formulář na poloviční vůči velikosti okna prohlížeče.
-  */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
   width: 50vw;
 
-  /*
-  TODO 5: Formulář zarovnejte na střed.
-  */
   margin: 0 auto;
-  transition: background-color 0.3s, border-color 0.3s;
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 
-/* Dark mode styly pro formulář */
 body.dark-mode form {
   background-color: #2a2a2a;
   border-color: #444;
   color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 input[type=email], input[type=password], input[type=date], input[type=file] {
@@ -48,7 +43,37 @@ input[type=email], input[type=password], input[type=date], input[type=file] {
   transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
-/* Dark mode styly pro input pole */
+input[type=email]:focus, input[type=password]:focus, input[type=date]:focus {
+  outline: none;
+  border-color: #04AA6D;
+}
+
+.password-container {
+  position: relative;
+  width: 100%;
+}
+
+.password-container input[type=password],
+.password-container input[type=text] {
+  padding-right: 45px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 20px;
+  user-select: none;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.toggle-password:hover {
+  opacity: 1;
+}
+
 body.dark-mode input[type=email],
 body.dark-mode input[type=password],
 body.dark-mode input[type=date],
@@ -78,15 +103,23 @@ button {
   cursor: pointer;
   display: inline;
   width:100%;
+  border-radius: 5px;
+  transition: opacity 0.3s, transform 0.1s;
 }
 
 button:hover { /* jak se chová tlačítko po najetí myši */
   opacity: 0.8;
 }
 
+button:active {
+  transform: scale(0.98);
+}
+
 .darkmodebtn{
-  float:right;
-  width:auto;
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  width: auto;
 
   /*
   TODO 6: Nastavte barvu tlačítka na stejnou barvu, jako má pozadí stránky
@@ -107,8 +140,9 @@ button:hover { /* jak se chová tlačítko po najetí myši */
   /*
   TODO 9: Nastavte odsazení od kraje stránky o 8px
   */
-  margin: 8px;
+  margin: 0;
   transition: background-color 0.3s, border-color 0.3s;
+  z-index: 1000;
 }
 .darkmodebtn > img{
   width:30px;
@@ -200,4 +234,97 @@ body.dark-mode .plan-option:hover {
 
 body.dark-mode .plan-option input[type=radio] {
   filter: invert(1) hue-rotate(180deg);
+}
+
+#todo-container {
+  background-color: #ffffff;
+  border: 3px solid #f1f1f1;
+  border-radius: 16px;
+  padding: 24px;
+  width: 50vw;
+  margin: 24px auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+body.dark-mode #todo-container {
+  background-color: #2a2a2a;
+  border-color: #444;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+#todo-container h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.task-item {
+  padding: 8px;
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-item input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.task-item.completed span {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.add-task-container {
+  margin: 16px 0;
+  display: flex;
+  gap: 8px;
+}
+
+#new-task-input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: white;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+body.dark-mode #new-task-input {
+  background-color: #1a1a1a;
+  color: white;
+  border-color: #555;
+}
+
+.add-task-container button {
+  background-color: #04AA6D;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: auto;
+}
+
+#completed-separator {
+  margin: 16px 0;
+}
+
+#completed-separator hr {
+  border: 1px solid #ddd;
+}
+
+body.dark-mode #completed-separator hr {
+  border-color: #555;
+}
+
+#completed-count {
+  font-size: 14px;
+  color: #666;
+  margin: 8px 0;
+}
+
+body.dark-mode #completed-count {
+  color: #aaa;
 }
